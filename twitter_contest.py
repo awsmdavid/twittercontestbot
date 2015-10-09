@@ -7,12 +7,14 @@ import tweepy
 # 3. Copy keys
 
 # For Cronjob Command (if you need virtualenv)
-# source /........./bin/activate && python /............/twitter_contest.py
+# source /....../bin/activate && python /..../twitter_contest.py
+
 
 # CONSUMER_KEY = "blah"
 # CONSUMER_SECRET = "blah"
 # ACCESS_TOKEN = "blah"
 # ACCESS_TOKEN_SECRET = "blah"
+
 
 # OAuth Handshake
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -26,7 +28,7 @@ api = tweepy.API(auth)
 # TODO:
 # Refine query parameters
 # dont reprocess same tweets (perhaps use since_id)
-search_results = api.search(q="retweet follow contest giveaway", count=100, lang="en")
+search_results = api.search(q="retweet follow giveaway contest -RT", rpp=100, lang="en")
 # 	Parameters:
 # q the search query string
 # lang - Restricts tweets to the given language, given by an ISO 639-1 code.
@@ -43,13 +45,14 @@ for tweet in search_results:
     # check if the tweet is authentic or a retweet
     # hasattr returns false if the tweet has not been retweeted, i.e., is the original tweet
     if hasattr(tweet, "retweeted_status"):
+        # print "nope", "\n", tweet, "\n"
         pass
-    # for original tweets
-    elif "RT" not in tweet.text:
+    # check for original tweets
+    else:
         # TODO:
         # certain tweets have multiple follow demands, e.g., follow @person1 AND @person2 to be eligible
 
-        # get user sn
+        # get user screen name
         user_screen_name_to_follow = api.get_status(id=tweet_id).user.screen_name
         # follow the user
         try:
@@ -57,6 +60,7 @@ for tweet in search_results:
             retweet_result = api.retweet(id=tweet_id)
             # print user_screen_name_to_follow
             Follow_result = api.create_friendship(screen_name=user_screen_name_to_follow)
+            print "yep", "\n", tweet.text
         except:
             pass
 
