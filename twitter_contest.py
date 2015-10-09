@@ -40,7 +40,7 @@ search_results = api.search(q="retweet follow giveaway contest -RT", rpp=100, la
 # geocode - Returns tweets by users located within a given radius of the given latitude/longitude. The location is preferentially taking from the Geotagging API, but will fall back to their Twitter profile. The parameter value is specified by "latitide,longitude,radius", where radius units must be specified as either "mi" (miles) or "km" (kilometers). Note that you cannot use the near operator via the API to geocode arbitrary locations; however you can use this geocode parameter to search near geocodes directly.
 # show_user - When true, prepends "<user>:" to the beginning of the tweet. This is useful for readers that do not display Atom's author field. The default is false.
 
-# iterate over each search result
+# Iterate over each search result
 for tweet in search_results:
     tweet_id = tweet.id
     tweet_text = tweet.text
@@ -51,9 +51,6 @@ for tweet in search_results:
         pass
     # check for original tweets
     else:
-        # TODO:
-        # certain tweets have multiple follow demands, e.g., follow @person1 AND @person2 to be eligible
-
         list_of_accounts_to_follow = []
 
         ######################
@@ -69,6 +66,8 @@ for tweet in search_results:
             retweet_result = api.retweet(id=tweet_id)
 
             # Follow mad people
+            # (certain tweets have multiple follow demands, e.g., follow @person1 AND @person2 AND @person3 to be eligible - those jerks...)
+
             text_list = tweet_text.split(" ")
             for text in text_list:
                 text.strip("\n")
