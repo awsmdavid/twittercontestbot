@@ -1,5 +1,6 @@
 import tweepy
 
+# SETUP:
 # Set OAuth Keys
 # 1. Create twitter app at https://apps.twitter.com/
 # 2. Follow directions
@@ -9,6 +10,8 @@ CONSUMER_KEY = "blah"
 CONSUMER_SECRET = "blah"
 ACCESS_TOKEN = "blah"
 ACCESS_TOKEN_SECRET = "blah"
+
+
 
 # OAuth Handshake
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -35,24 +38,22 @@ search_results = api.search(q="retweet follow contest giveaway", count=100, lang
 
 # iterate over each search result
 for tweet in search_results:
+    tweet_id = tweet.id
     # check if the tweet is authentic or a retweet
-
     # hasattr returns false if the tweet has not been retweeted, i.e., is the original tweet
     if hasattr(tweet, "retweeted_status"):
-        print ""
-
+        pass
     # for original tweets
     else:
-        # Retweet the contest promo tweet
-        retweet_result = api.retweet(id=tweet.id)
-        # Follow the user
         # TODO:
         # certain tweets have multiple follow demands, e.g., follow @person1 AND @person2 to be eligible
 
         # get user sn
-        user_screen_name_to_follow = api.get_status(id=tweet.id).user.screen_name
+        user_screen_name_to_follow = api.get_status(id=tweet_id).user.screen_name
         # follow the user
         try:
+            # Retweet the contest promo tweet
+            retweet_result = api.retweet(id=tweet_id)
             # print user_screen_name_to_follow
             Follow_result = api.create_friendship(screen_name=user_screen_name_to_follow)
         except:
@@ -80,6 +81,15 @@ for tweet in search_results:
 #     print ("Truncated:", tweet.truncated)
 
 
-# Random Notes for future use
+# Random Notes for future use:
+# If you see the following warning:
+#   "InsecurePlatformWarning: A true SSLContext object is not available. This prevents urllib3
+#   from configuring SSL appropriately and may cause certain SSL connections to fail."
+# call: pip install requests[security] (need to install security packages because your python should be 2.7.9+)
+#
+# Alternatively, if you dont want to upgrade or don't have sudo permission, you can surpress the warnings by downgrading your requests:
+# pip install requests==2.5.3
+
+
 # use this to send tweets - must have header or else will throw an error
 #   Result = api.update_status(status=TweetText, in_reply_to_status_id=ReplyToTweetID, headers={'content-length': 0})
