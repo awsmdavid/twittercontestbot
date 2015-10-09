@@ -6,12 +6,13 @@ import tweepy
 # 2. Follow directions
 # 3. Copy keys
 
-CONSUMER_KEY = "blah"
-CONSUMER_SECRET = "blah"
-ACCESS_TOKEN = "blah"
-ACCESS_TOKEN_SECRET = "blah"
+# For Cronjob Command (if you need virtualenv)
+# source /........./bin/activate && python /............/twitter_contest.py
 
-
+# CONSUMER_KEY = "blah"
+# CONSUMER_SECRET = "blah"
+# ACCESS_TOKEN = "blah"
+# ACCESS_TOKEN_SECRET = "blah"
 
 # OAuth Handshake
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -44,7 +45,7 @@ for tweet in search_results:
     if hasattr(tweet, "retweeted_status"):
         pass
     # for original tweets
-    else:
+    elif "RT" not in tweet.text:
         # TODO:
         # certain tweets have multiple follow demands, e.g., follow @person1 AND @person2 to be eligible
 
