@@ -1,13 +1,14 @@
 import tweepy
 
 # SETUP:
-# Set OAuth Keys
+# Create Twitter OAuth Keys
 # 1. Create twitter app at https://apps.twitter.com/
 # 2. Follow directions
 # 3. Copy keys
 
 # For Cronjob Command (if you need virtualenv)
 # source /....../bin/activate && python /..../twitter_contest.py
+
 
 CONSUMER_KEY = "blah"
 CONSUMER_SECRET = "blah"
@@ -27,8 +28,7 @@ api = tweepy.API(auth)
 # Refine query parameters
 # dont reprocess same tweets (perhaps use since_id)
 
-# search_results = api.search(q="retweet follow", rpp=100, lang="en")
-search_results = api.search(q="retweet follow giveaway contest -RT", rpp=100, lang="en")
+search_results = api.search(q="giveaway follow retweet -RT", rpp=100, lang="en")
 
 # 	Parameters:
 # q the search query string: for more info - https://twitter.com/search-home (click operators)
@@ -40,7 +40,7 @@ search_results = api.search(q="retweet follow giveaway contest -RT", rpp=100, la
 # geocode - Returns tweets by users located within a given radius of the given latitude/longitude. The location is preferentially taking from the Geotagging API, but will fall back to their Twitter profile. The parameter value is specified by "latitide,longitude,radius", where radius units must be specified as either "mi" (miles) or "km" (kilometers). Note that you cannot use the near operator via the API to geocode arbitrary locations; however you can use this geocode parameter to search near geocodes directly.
 # show_user - When true, prepends "<user>:" to the beginning of the tweet. This is useful for readers that do not display Atom's author field. The default is false.
 
-# Iterate over each search result
+# iterate over each search result
 for tweet in search_results:
     tweet_id = tweet.id
     tweet_text = tweet.text
