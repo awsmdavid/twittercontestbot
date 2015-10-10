@@ -15,6 +15,7 @@ CONSUMER_SECRET = "blah"
 ACCESS_TOKEN = "blah"
 ACCESS_TOKEN_SECRET = "blah"
 
+
 # OAuth Handshake
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -28,7 +29,11 @@ api = tweepy.API(auth)
 # Refine query parameters
 # dont reprocess same tweets (perhaps use since_id)
 
-search_results = api.search(q="giveaway follow retweet -RT", rpp=100, lang="en")
+# Throw in possible search queries; while multiple searches will result in duplicates, it provides more results over one "super query" (cast a broader net)
+search_results_1 = api.search(q="giveaway follow retweet -RT", rpp=100, lang="en")
+search_results_2 = api.search(q="giveaway contest follow retweet -RT", rpp=100, lang="en")
+
+search_results = search_results_1 + search_results_2
 
 # 	Parameters:
 # q the search query string: for more info - https://twitter.com/search-home (click operators)
@@ -81,14 +86,11 @@ for tweet in search_results:
         for screen_name in list_of_accounts_to_follow:
             # Cleanse accounts of "@"
             screen_name = screen_name.replace("@", "")
+            print screen_name
             try:
                 Follow_result = api.create_friendship(screen_name=screen_name)
             except:
                 pass
-
-
-
-
 
 ################################
 # Random Notes for future use: #
