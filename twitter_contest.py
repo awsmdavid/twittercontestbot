@@ -15,7 +15,6 @@ CONSUMER_SECRET = "blah"
 ACCESS_TOKEN = "blah"
 ACCESS_TOKEN_SECRET = "blah"
 
-
 # OAuth Handshake
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -29,7 +28,7 @@ api = tweepy.API(auth)
 # Refine query parameters
 # dont reprocess same tweets (perhaps use since_id)
 
-# Throw in possible search queries; while multiple searches will result in duplicates, it provides more results over one "super query" (cast a broader net)
+# Throw in possible search queries; while multiple searches will result in duplicates, it provides more results over one "super query" (hoping to cast a broader net)
 search_results_1 = api.search(q="giveaway follow retweet -RT", rpp=100, lang="en")
 search_results_2 = api.search(q="giveaway contest follow retweet -RT", rpp=100, lang="en")
 
@@ -49,13 +48,17 @@ search_results = search_results_1 + search_results_2
 for tweet in search_results:
     tweet_id = tweet.id
     tweet_text = tweet.text
+    tweet_retweet_count = tweet.retweet_count
     # check if the tweet is authentic or a retweet
     # hasattr returns false if the tweet has not been retweeted, i.e., is the original tweet
     if hasattr(tweet, "retweeted_status"):
         # print "yo", tweet_text
         pass
     # check for original tweets
-    else:
+    # SWAG - a bunch of bots crappily follow random tweets, want to capture more authentic giveaways:
+    # currently, the best method I can think of is using retweet_count>10; can't find api for determining original outside of this and the presence of "RT"
+    elif tweet_retweet_count>10:
+        print tweet.retweet_count
         list_of_accounts_to_follow = []
 
         ######################
